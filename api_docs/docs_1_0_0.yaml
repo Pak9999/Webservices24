@@ -1,0 +1,220 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 'Go Fish'
+  description: 'A first version of an api meant to handle communication between frontend and backend in a project based on playing the card game go fish against specific locations.'
+
+#----------------Paths section----------------#
+
+paths:
+  /:
+
+    post:
+      summary: Create a new game
+      operationId: start_new_game
+      description: Use this endpoint to start a new game
+      requestBody:
+        description: The player's name, oppeonent information and deck id
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                player:
+                  type: string
+                  description: The name of the player
+                opponent:
+                  type: string
+                  description: The name of the opponent
+                deck_id:
+                  type: string
+                  description: The id of the deck used in the game
+      responses:
+        '201':
+          description: Game created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameObject'
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+        '501':
+          description: Not implemented
+        
+  /{id}:
+
+    get:
+      summary: Get a specific game
+      operationId: get_game
+      description: Use this endpoint to target specific game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the game
+      responses:
+        '200':
+          description: Ok, returns game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameObject'
+        '400':
+          description: Bad request
+        '404':
+          description: Game not found
+        '500':
+          description: Server error
+        '501':
+          description: Not implemented
+
+    put:
+      summary: Update specific game
+      operationId: update_game
+      description: Use this endpoint to update a game / in order to play
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the game
+      requestBody:
+        description: The updated game data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameObject'
+      responses:
+        '200':
+          description: Game succesfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameObject'
+        '400':
+          description: Bad request
+        '404':
+          description: Game not found
+        '500':
+          description: Server error
+        '501':
+          description: Not implemented
+
+    delete:
+      summary: delete specific game
+      operationId: delete_game
+      description: Use this endpoint to delete a specific game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The id of the game
+      responses:
+        '200':
+          description: ok, game succesfully deleted
+        '400':
+          description: bad request
+        '404':
+          description: game not found
+        '500':
+          description: server error
+        '501':
+          description: not implemented
+
+
+
+#----------------Components section----------------#
+
+components:
+  schemas:
+    GameObject:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id for the game
+        player:
+          type: string
+          description: The name of the player
+        opponent:
+          type: string
+          description: The name of the opponent (specific interchange chosen by player)
+        deck_id:
+          type: string
+          description: The id of the deck used in the game
+        player_hand:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardObject'
+          description: The cards in the player's hand
+        opponent_hand:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardObject'
+          description: The cards in the opponent's hand
+        remaining_cards:
+          type: integer
+          description: The number of cards left in the deck
+        round_count:
+          type: integer
+          description: The number of rounds played
+        player_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetObject'
+          description: The sets the player has collected
+        opponent_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetObject'
+        player_last_asked_for:
+          type: string
+          description: The card the player last asked for
+        opponent_last_asked_for:
+          type: string
+          description: The card the opponent last asked for
+        image_url:
+          type: string
+          description: The url of the image which the oppenent based their decision on
+        start_time:
+          type: string
+          format: date-time
+          description: The time the game was started
+      
+    CardObject:
+      type: object
+      properties:
+        value:
+          type: string
+          description: the value of the card (2-10, J, Q, K, A)
+        suit:
+          type: string
+          description: the suit of the card (H, D, C, S)
+        image_url:
+          type: string
+          description: the url of the image of the card.
+
+    SetObject:
+      type: object
+      properties:
+        card1:
+          $ref: '#/components/schemas/CardObject'
+        card2:
+          $ref: '#/components/schemas/CardObject'
+        card3:
+          $ref: '#/components/schemas/CardObject'
+        card4:
+          $ref: '#/components/schemas/CardObject'
+
+      
+      
+                  
