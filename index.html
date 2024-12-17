@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Finns i sjön Kortspel</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div id="loading-screen">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div class="container">
+            <div class="game-header">
+                <h1>Finns i sjön</h1>
+                <p>Samla så många 4-korts set som möjligt!</p>
+            </div>
+
+            <div id="game-status">Laddar spel...</div>
+
+            <div class="game-section">
+                <h2><i class="fas fa-trophy"></i> Dina set</h2>
+                <div class="sets-container" id="player-sets"></div>
+            </div>
+
+            <div class="game-section">
+                <h2><i class="fas fa-desktop"></i> Datorns set</h2>
+                <div class="sets-container" id="computer-sets"></div>
+            </div>
+
+            <div class="game-section">
+                <h2><i class="fas fa-memory"></i> Datorns minnesbank</h2>
+                <div id="computer-memory" class="sets-container"></div>
+            </div>
+
+            <div class="game-section">
+                <h2><i class="fas fa-hand-holding"></i> Din hand</h2>
+                <div class="hand-container" id="player-hand"></div>
+            </div>
+        </div>
+
+        <div id="win-screen" class="hidden">
+            <h2 id="win-message"></h2>
+            <button id="new-game-button">Nytt spel</button>
+        </div>
+
+        <script src="scripts.js"></script>
+    </body>
+</html>
