@@ -1,234 +1,199 @@
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class GoFishController {
+    private CardGame game = null;
 
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        CardGame game = createNewGame();
-        System.out.println(game.getGameId());
-        System.out.println(game.getRemainingCards());
-        game.setPlayerHand(dealCards(game, null, 7));
-        game.setComputerHand(dealCards(game, null, 7));
-        Scanner sc = new Scanner(System.in);
-
-        while (game.getRemainingCards() > 0){
-            System.out.println("***********");
-            System.out.println(game.getRemainingCards());
-            System.out.println("*********");
-            for (int i = 0; i < game.getPlayerHand().size(); i++){
-                System.out.println("Player: "+game.getPlayerHand().get(i));
-            }
-            System.out.println("***********");
-            for (int i = 0; i < game.getComputerHand().size(); i++){
-                System.out.println("Computer: "+game.getComputerHand().get(i));
-            }
-            System.out.println("***********");
-
-            if (game.getRoundCounter() %2 != 0) {
-                String value = sc.next();
-                if (value == "ö"){
-                    for (int i = 0; i < game.getCompletedPlayerPairs().size(); i++){
-                        System.out.println(game.getCompletedPlayerPairs().get(i).toString());
-                    }
-                    System.out.println("-----------");
-                }
-
-                System.out.println("***********");
-
-                askFor(game, value);
-                System.out.println("***********");
-                String s = checkPlayerPairs(game.getPlayerHand());
-                if (s != null) {
-                    System.out.println("WOWOWOWOWOWOWOWOWOWOWOWOOWOWOWOWOWOW");
-                    System.out.println(s);
-                    ArrayList<PlayingCard> completedPairs = game.getCompletedPlayerPairs();
-                    moveCards(game,game.getPlayerHand(), game.getCompletedPlayerPairs(), s);
-                    System.out.println("---------");
-                    for (int i = 0; i < completedPairs.size(); i++){
-                        System.out.println(completedPairs.get(i).toString());
-                    }
-                    System.out.println("-----------");
-                }
-            }
-            else {
-                String value = "2";
-                if (value == game.getLatestComputerRequest()){
-                    shuffleArray(game.getComputerHand());
-                    TimeUnit.SECONDS.sleep(1);
-                    value=game.getComputerHand().get(0).getValue();
-                }
-                System.out.println("Computer asked for: "+ value);
-                askFor(game, value);
-                String s = checkComputerPairs(game.getComputerHand());
-                if (s != null) {
-                    System.out.println("WOWOWOWOWOWOWOWOWOWOWOWOOWOWOWOWOWOW");
-                    System.out.println(s);
-                    ArrayList<PlayingCard> completedPairs = game.getCompletedComputerPairs();
-                    moveCards(game,game.getComputerHand(), game.getCompletedComputerPairs(), s);
-                    System.out.println("---------");
-                    for (int i = 0; i < completedPairs.size(); i++){
-                        System.out.println("Comp completed: "+completedPairs.get(i).toString());
-                    }
-                    System.out.println("-----------");
-                }
-            }
-        }
-        for (int i = 0; i < game.getCompletedPlayerPairs().size(); i++){
-            System.out.println("player completed: "+game.getCompletedPlayerPairs().get(i).toString());
-        }
-        System.out.println("-----------");
-        for (int i = 0; i < game.getCompletedComputerPairs().size(); i++){
-            System.out.println("Comp completed: "+game.getCompletedComputerPairs().get(i).toString());
-        }
-        System.out.println("-----------");
-    }
-    public static void moveCards(CardGame game,ArrayList<PlayingCard> current, ArrayList<PlayingCard> completed, String s) throws InterruptedException {
-
-        TimeUnit.SECONDS.sleep(1);
-        for(int i = 0; i < current.size(); i++){
-            String st = s;
-            if(current.get(i).getValue().equals(s)){
-                PlayingCard pc = current.get(i);
-                completed.add(pc);
-                current.remove(i);
-            }
-        }
-        for(int i = 0; i < current.size(); i++) {
-            String st = s;
-            if (current.get(i).getValue().equals(s)) {
-                PlayingCard pc = current.get(i);
-                completed.add(pc);
-                current.remove(i);
-            }
-        }
-        /*
-        if (game.getRemainingCards() == 0 && game.getPlayerHand().size()==1){
-            PlayingCard pc = currentArray.get(0);
-            completed.add(pc);
-            currentArray.remove(pc);
-        }
-         */
+    public GoFishController() throws IOException, InterruptedException {
+        this.game = createNewGame();
     }
 
-    public static CardGame createNewGame(){
-        JsonNode deck = CardAPIHandler.getNewDeck();
-        CardGame game = new CardGame();
-        game.setGameId(deck.get("deck_id").toString());
-        game.setRemainingCards(deck.get("remaining").asInt());
+    public CardGame getGame() {
         return game;
     }
 
-    public static ArrayList<PlayingCard> dealCards(CardGame currentGame, ArrayList<PlayingCard> whosTurn, int nbrOfCards) throws IOException {
-        JsonNode currentCards = CardAPIHandler.drawCards(currentGame.getGameId(), nbrOfCards);
-        if (whosTurn == null){
-            whosTurn = new ArrayList<>();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        GoFishController controller = new GoFishController();
+        CardGame game = controller.getGame();
+        System.out.println(game.getGameId());
+        System.out.println(game.getRemainingCards());
+        Scanner sc = new Scanner(System.in);
+
+        while (game.getRemainingCards() > 0) {
+            System.out.println("***********");
+            System.out.println(game.getRemainingCards());
+            System.out.println("*********");
+            for (int i = 0; i < game.getPlayerHand().size(); i++) {
+                System.out.println("Player: " + game.getPlayerHand().get(i));
+            }
+            System.out.println("***********");
+            for (int i = 0; i < game.getComputerHand().size(); i++) {
+                System.out.println("Computer: " + game.getComputerHand().get(i));
+            }
+            System.out.println("***********");
+            String value = sc.next();
+            controller.runGame(value);
+
+            for (int i = 0; i < game.getCompletedPlayerPairs().size(); i++) {
+                System.out.println("player completed: " + game.getCompletedPlayerPairs().get(i).toString());
+            }
+            System.out.println("-----------");
+            for (int i = 0; i < game.getCompletedComputerPairs().size(); i++) {
+                System.out.println("Comp completed: " + game.getCompletedComputerPairs().get(i).toString());
+            }
+            System.out.println("-----------");
+            System.out.println("** " + (game.getRemainingCards() + game.getPlayerHand().size() + game.getCompletedPlayerPairs().size() + game.getComputerHand().size()+game.getCompletedComputerPairs().size()) + " **");
         }
+        if (game.getCompletedPlayerPairs().size()>game.getCompletedComputerPairs().size()){
+            System.out.println("Player won with: " + game.getCompletedPlayerPairs().size()/4 + " pairs");
+        }
+        else if (game.getCompletedComputerPairs().size() > game.getCompletedPlayerPairs().size()){
+            System.out.println("Computer won with: " + game.getCompletedComputerPairs().size()/4 + " pairs");
+        }
+    }
+
+    public void moveCards(CardGame game, ArrayList<PlayingCard> current, ArrayList<PlayingCard> completed, String s) throws InterruptedException {
+
+        TimeUnit.SECONDS.sleep(1);
+        for (int i = 0; i < current.size(); i++) {
+            if (current.get(i).getValue().equals(s)) {
+                PlayingCard pc = current.get(i);
+                completed.add(pc);
+                current.remove(pc);
+            }
+        }
+        TimeUnit.SECONDS.sleep(1);
+        for (int i = 0; i < current.size(); i++) {
+            if (current.get(i).getValue().equals(s)) {
+                PlayingCard pc = current.get(i);
+                completed.add(pc);
+                current.remove(pc);
+            }
+        }
+
+
+    }
+
+    public CardGame createNewGame() throws IOException, InterruptedException {
+        JsonNode deck = CardAPIHandler.getNewDeck();
+        this.game = new CardGame();
+        game.setGameId(deck.get("deck_id").toString());
+        game.setRemainingCards(deck.get("remaining").asInt());
+        setupGame();
+        return game;
+    }
+
+    public void setupGame() throws IOException, InterruptedException {
+        dealCards(game, game.getPlayerHand(), 7);
+        dealCards(game, game.getComputerHand(), 7);
+
+        //Check if player has completed pairs at start of game
+        String playerCompleted = checkPairs(game.getPlayerHand());
+        moveCards(game, game.getPlayerHand(), game.getCompletedPlayerPairs(), playerCompleted);
+
+        //Check if computer has completed pairs
+        String compCompleted = checkPairs(game.getComputerHand());
+        moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
+    }
+
+    public void dealCards(CardGame currentGame, ArrayList<PlayingCard> whosTurn, int nbrOfCards) throws IOException {
+        JsonNode currentCards = CardAPIHandler.drawCards(currentGame.getGameId(), nbrOfCards);
         try {
-            for(JsonNode card : currentCards.get("cards")){
+            for (JsonNode card : currentCards.get("cards")) {
                 String value = card.get("value").toString();
                 String suit = card.get("suit").toString();
                 String imgURI = card.get("image").toString();
-                whosTurn.add(new PlayingCard(value.substring(1, value.length()-1),
-                        suit.substring(1, suit.length()-1),
+                whosTurn.add(new PlayingCard(value.substring(1, value.length() - 1),
+                        suit.substring(1, suit.length() - 1),
                         imgURI));
             }
             currentGame.setRemainingCards(currentCards.get("remaining").asInt());
-            return whosTurn;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Execption i dealStartingCards");
             System.out.println(e);
         }
-        return null;
     }
 
-    public static String checkPlayerPairs(ArrayList<PlayingCard> currentHand) throws InterruptedException {
+    public String checkPairs(ArrayList<PlayingCard> currentHand) {
         HashMap<String, Integer> hm = new HashMap<>();
         for (PlayingCard pc : currentHand) {
             String s = pc.getValue();
             if (!hm.containsKey(s)) {
                 hm.put(s, 1);
             } else {
-                hm.put(s, hm.get(s)+1);
+                hm.put(s, hm.get(s) + 1);
             }
-            if(hm.get(s) == 4){
-                return s;
-            }
-        }
-
-        return null;
-    }
-
-    public static String checkComputerPairs(ArrayList<PlayingCard> currentHand){
-        HashMap<String, Integer> hm = new HashMap<>();
-        for (PlayingCard pc : currentHand){
-            String s = pc.getValue();
-            if (!hm.containsKey(s)){
-                hm.put(s, 1);
-            } else {
-                hm.put(s, hm.get(s)+1);
-            }
-            if (hm.get(s) == 4){
+            if (hm.get(s) == 4) {
                 return s;
             }
         }
         return null;
     }
 
-    public static void askFor(CardGame currentGame, String value) throws IOException, InterruptedException {
+    public void askFor(CardGame currentGame, String value) throws IOException, InterruptedException {
         boolean foundCards = false;
-        if(currentGame.getRoundCounter() % 2 != 0) {
+        if (currentGame.getRoundCounter() % 2 != 0) {
             currentGame.setLatestPlayerRequest(value);
-            for (int i = 0; i < currentGame.getComputerHand().size(); i++){
+            for (int i = 0; i < currentGame.getComputerHand().size(); i++) {
                 PlayingCard card = currentGame.getComputerHand().get(i);
-                if (card.getValue().equalsIgnoreCase(value)){
+                if (card.getValue().equalsIgnoreCase(value)) {
                     currentGame.getPlayerHand().add(card);
                     currentGame.getComputerHand().remove(card);
                     foundCards = true;
                 }
             }
-            System.out.println("*******");
             if (!foundCards) {
-                currentGame.setPlayerHand(dealCards(currentGame,currentGame.getPlayerHand(),1));
+                dealCards(currentGame, currentGame.getPlayerHand(), 1);
             }
-        }
-        else {
+        } else {
             currentGame.setLatestComputerRequest(value);
-            for (int i = 0; i < currentGame.getPlayerHand().size(); i++){
+            for (int i = 0; i < currentGame.getPlayerHand().size(); i++) {
                 PlayingCard card = currentGame.getPlayerHand().get(i);
-                if (card.getValue().equalsIgnoreCase(value)){
+                if (card.getValue().equalsIgnoreCase(value)) {
                     currentGame.getComputerHand().add(card);
                     currentGame.getPlayerHand().remove(card);
                     foundCards = true;
                 }
             }
-            if (!foundCards){
-                currentGame.setComputerHand(dealCards(currentGame, currentGame.getComputerHand(), 1));
+            if (!foundCards) {
+                dealCards(currentGame, currentGame.getComputerHand(), 1);
             }
         }
-        currentGame.setRoundCounter((currentGame.getRoundCounter()+1));
+        currentGame.setRoundCounter((currentGame.getRoundCounter() + 1));
     }
 
-    private static ArrayList<PlayingCard> shuffleArray(ArrayList<PlayingCard> arrayList){
-        PlayingCard[] tempArray = new PlayingCard[arrayList.size()];
-        for (int i = 0; i < arrayList.size(); i++){
-            tempArray[i] = arrayList.get(i);
-            arrayList.remove(i);
+    private void shuffleArray(ArrayList<PlayingCard> arrayList) {
+        Collections.shuffle(arrayList);
+    }
+    public String checkCompChoise(String compvalue){
+        if (compvalue == game.getLatestComputerRequest()) {
+            shuffleArray(game.getComputerHand());
+            compvalue = game.getComputerHand().get(0).getValue();
         }
-        int N = arrayList.size();
+        return compvalue;
+    }
 
-        Random randomGenerator = new Random();
-        for (int i = 0; i < N; i++) {
-            int r = i + randomGenerator.nextInt(N-i);     // between i and N-1
-            PlayingCard t = tempArray[i]; tempArray[i] = tempArray[r]; tempArray[r] = t;
-        }
-        for (int i = 0; i < N; i++){
-            PlayingCard pc = tempArray[i];
-            arrayList.add(pc);
-        }
-        return arrayList;
+    public CardGame runGame(String value) throws IOException, InterruptedException {
+        //Player choice and moves
+        askFor(game, value);
+        String playerCompleted = checkPairs(game.getPlayerHand());
+        moveCards(game, game.getPlayerHand(), game.getCompletedPlayerPairs(), playerCompleted);
+
+        //Computers choice and moves
+        String compValue = checkCompChoise("2"); //byt ut 2 mot Olas metod i senare skede.
+        askFor(game, compValue);
+        String compCompleted = checkPairs(game.getComputerHand());
+        moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
+
+        return game;
+    }
+    public void deletegame(){
+        this.game = null;
     }
 }
+
