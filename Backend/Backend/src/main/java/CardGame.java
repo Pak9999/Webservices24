@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class CardGame {
     private String gameId;
     private String CardDeckid;
-    private ArrayList<PlayingCard> playerHand;
-    private ArrayList<PlayingCard> computerHand;
+    private ArrayList<PlayingCard> playerHand = new ArrayList<>();
+    private ArrayList<PlayingCard> computerHand = new ArrayList<>();
     private int remainingCards;
     private int roundCounter = 1;
     private String latestPlayerRequest;
