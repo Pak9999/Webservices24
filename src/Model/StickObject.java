@@ -1,7 +1,5 @@
 package Model;
 
-import Model.PlayingCard;
-
 public class StickObject {
     private PlayingCard c1;
     private PlayingCard c2;

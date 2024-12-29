@@ -2,7 +2,6 @@ package Boundry;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import netscape.javascript.JSObject;
 
 import java.net.URI;
 import java.net.http.HttpClient;

@@ -1,8 +1,5 @@
 package Model;
 
-import Model.PlayingCard;
-import Model.StickObject;
-
 import java.util.ArrayList;
 
 public class CardGame {
