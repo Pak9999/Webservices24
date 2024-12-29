@@ -1,3 +1,6 @@
+package Boundry;
+
+import Model.ResponseObjTrafikverket;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.JsonNode;
 import kong.unirest.core.Unirest;

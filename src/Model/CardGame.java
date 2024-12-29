@@ -1,4 +1,8 @@
-import java.sql.Time;
+package Model;
+
+import Model.PlayingCard;
+import Model.StickObject;
+
 import java.util.ArrayList;
 
 public class CardGame {
@@ -13,8 +17,8 @@ public class CardGame {
     private String decisionBasedOnPicture;
     private String playerID;
     private String computerID;
-    private ArrayList<PlayingCard> completedPlayerPairs = new ArrayList<>();
-    private ArrayList<PlayingCard> completedComputerPairs = new ArrayList<>();
+    private ArrayList<StickObject> completedPlayerPairs = new ArrayList<>();
+    private ArrayList<StickObject> completedComputerPairs = new ArrayList<>();
 
     public String getGameId() {
         return gameId;
@@ -64,19 +68,19 @@ public class CardGame {
         this.roundCounter = roundCounter;
     }
 
-    public ArrayList<PlayingCard> getCompletedPlayerPairs() {
+    public ArrayList<StickObject> getCompletedPlayerPairs() {
         return completedPlayerPairs;
     }
 
-    public void setCompletedPlayerPairs(ArrayList<PlayingCard> completedPlayerPairs) {
+    public void setCompletedPlayerPairs(ArrayList<StickObject> completedPlayerPairs) {
         this.completedPlayerPairs = completedPlayerPairs;
     }
 
-    public ArrayList<PlayingCard> getCompletedComputerPairs() {
+    public ArrayList<StickObject> getCompletedComputerPairs() {
         return completedComputerPairs;
     }
 
-    public void setCompletedComputerPairs(ArrayList<PlayingCard> completedComputerPairs) {
+    public void setCompletedComputerPairs(ArrayList<StickObject> completedComputerPairs) {
         this.completedComputerPairs = completedComputerPairs;
     }
 

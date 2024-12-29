@@ -1,3 +1,5 @@
+package Boundry;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import netscape.javascript.JSObject;
@@ -31,7 +33,7 @@ public class CardAPIHandler {
     }
 
     public static JsonNode drawCards(String id, int number){
-        String url = "https://deckofcardsapi.com/api/deck/"+id.substring(1,id.length()-1)+"/draw/?count="+number;
+        String url = "https://deckofcardsapi.com/api/deck/"+id+"/draw/?count="+number;
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder()
