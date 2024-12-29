@@ -1,3 +1,5 @@
+package Model;
+
 public class AiMove {
    private String adress;
    private String name;

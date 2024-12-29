@@ -1,27 +1,34 @@
+package Controller;
+
+import Boundry.CardAPIHandler;
+import Model.AiMove;
+import Model.CardGame;
+import Model.PlayingCard;
+import Model.StickObject;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class GoFishController {
-    private CardGame game = null;
+    //private CardGame game = null;
+    private APIController apiC = null;
+    private HashMap<String, CardGame> allGames =new HashMap<>();
 
     public GoFishController() throws IOException, InterruptedException {
-        this.game = createNewGame();
+        this.apiC = new APIController();
     }
 
-    public CardGame getGame() {
-        return game;
+    public CardGame getGame(String id) {
+        return allGames.get(id);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         GoFishController controller = new GoFishController();
-        CardGame game = controller.getGame();
+        CardGame game = controller.createNewGame();
         System.out.println(game.getGameId());
         System.out.println(game.getRemainingCards());
+        String id = game.getGameId();
         Scanner sc = new Scanner(System.in);
 
         while (game.getRemainingCards() > 0) {
@@ -37,7 +44,7 @@ public class GoFishController {
             }
             System.out.println("***********");
             String value = sc.next();
-            controller.runGame(value);
+            controller.runGame(id, value);
 
             for (int i = 0; i < game.getCompletedPlayerPairs().size(); i++) {
                 System.out.println("player completed: " + game.getCompletedPlayerPairs().get(i).toString());
@@ -57,38 +64,36 @@ public class GoFishController {
         }
     }
 
-    public void moveCards(CardGame game, ArrayList<PlayingCard> current, ArrayList<PlayingCard> completed, String s) throws InterruptedException {
-
-        TimeUnit.SECONDS.sleep(1);
+    public void moveCards(CardGame game, ArrayList<PlayingCard> current, ArrayList<StickObject> completed, String s) throws InterruptedException {
+        ArrayList<PlayingCard> a = new ArrayList<>();
         for (int i = 0; i < current.size(); i++) {
             if (current.get(i).getValue().equals(s)) {
+                a.add(current.get(i));
                 PlayingCard pc = current.get(i);
-                completed.add(pc);
                 current.remove(pc);
+                i--;
             }
         }
-        TimeUnit.SECONDS.sleep(1);
-        for (int i = 0; i < current.size(); i++) {
-            if (current.get(i).getValue().equals(s)) {
-                PlayingCard pc = current.get(i);
-                completed.add(pc);
-                current.remove(pc);
-            }
+        if(a.size() > 0) {
+            StickObject obj = new StickObject(a.get(0), a.get(1), a.get(2), a.get(3));
+            completed.add(obj);
         }
-
 
     }
 
     public CardGame createNewGame() throws IOException, InterruptedException {
         JsonNode deck = CardAPIHandler.getNewDeck();
-        this.game = new CardGame();
-        game.setGameId(deck.get("deck_id").toString());
+        CardGame game = new CardGame();
+        String id = deck.get("deck_id").toString();
+        game.setGameId(id.substring(1,id.length()-1));
+        System.out.println(game.getGameId());
         game.setRemainingCards(deck.get("remaining").asInt());
-        setupGame();
+        setupGame(game);
+        allGames.put(game.getGameId(), game);
         return game;
     }
 
-    public void setupGame() throws IOException, InterruptedException {
+    public void setupGame(CardGame game) throws IOException, InterruptedException {
         dealCards(game, game.getPlayerHand(), 7);
         dealCards(game, game.getComputerHand(), 7);
 
@@ -144,6 +149,7 @@ public class GoFishController {
                 if (card.getValue().equalsIgnoreCase(value)) {
                     currentGame.getPlayerHand().add(card);
                     currentGame.getComputerHand().remove(card);
+                    i--;
                     foundCards = true;
                 }
             }
@@ -157,6 +163,7 @@ public class GoFishController {
                 if (card.getValue().equalsIgnoreCase(value)) {
                     currentGame.getComputerHand().add(card);
                     currentGame.getPlayerHand().remove(card);
+                    i--;
                     foundCards = true;
                 }
             }
@@ -170,6 +177,8 @@ public class GoFishController {
     private void shuffleArray(ArrayList<PlayingCard> arrayList) {
         Collections.shuffle(arrayList);
     }
+
+    /*
     public String checkCompChoise(String compvalue){
         if (compvalue == game.getLatestComputerRequest()) {
             shuffleArray(game.getComputerHand());
@@ -177,23 +186,34 @@ public class GoFishController {
         }
         return compvalue;
     }
+     */
 
-    public CardGame runGame(String value) throws IOException, InterruptedException {
+    public CardGame runGame(String id, String value) throws IOException, InterruptedException {
+        CardGame game = allGames.get(id);
         //Player choice and moves
         askFor(game, value);
         String playerCompleted = checkPairs(game.getPlayerHand());
         moveCards(game, game.getPlayerHand(), game.getCompletedPlayerPairs(), playerCompleted);
 
         //Computers choice and moves
-        String compValue = checkCompChoise("2"); //byt ut 2 mot Olas metod i senare skede.
+        AiMove nextMove = apiC.newMove();
+        shuffleArray(game.getComputerHand());
+        String compValue = game.getComputerHand().get(nextMove.getNumber()).getValue();
+        System.out.println("Comp asked for: "+compValue);
         askFor(game, compValue);
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
 
         return game;
     }
-    public void deletegame(){
-        this.game = null;
+
+    public void deletegame(String id){
+        CardGame game = allGames.get(id);
+        allGames.remove(game.getGameId());
+    }
+
+    public HashMap<String, CardGame> getAllgames(){
+        return allGames;
     }
 }
 
