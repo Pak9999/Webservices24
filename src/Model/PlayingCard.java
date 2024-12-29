@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.Comparator;
-
 public class PlayingCard {
     private String value;
     private String suit;
