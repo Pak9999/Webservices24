@@ -2,19 +2,20 @@
 import React from "react";
 
 import Header from "./layout/header/header.tsx";
-import Footer from "/layout/footer";
-import EnterName from "/layout/enterName";
-import ChooseOpponent from "/layout/chooseOpponent";
+import Footer from "./layout/footer/footer.tsx";
+import GameOptions from "./layout/gameOptions/gameOptions.tsx";
 
 
 
-function Home() {
+const Home: React.FC = () => {
     return (
         <>
             <Header></Header>
-            <EnterName></EnterName>
-            <ChooseOpponent></ChooseOpponent>
+            <GameOptions></GameOptions>
             <Footer></Footer>
         </>
-    )
+    );
 }
+
+
+export default Home;

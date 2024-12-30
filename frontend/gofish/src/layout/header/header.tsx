@@ -1,13 +1,12 @@
+import React from "react";
 
 
-
-function Header() {
+const Header: React.FC = () => {
     return (
-        <header>
-            <h1>Go Fish</h1>
-        </header>
-    )
+        <>
+            <p>Header</p>
+        </>
+    );
 }
-
 
 export default Header;

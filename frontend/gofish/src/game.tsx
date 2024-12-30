@@ -1,21 +1,19 @@
 import React from "react";
+import Header from "./layout/header/header";
+import PlayTable from "./layout/playTable/playTable";
+import Footer from "./layout/footer/footer";
 
 
 
-function Game() {
+
+const Game: React.FC = () => {
     return (
         <>
             <Header></Header>
-
-            <PlayerHand></PlayerHand>
-            <ComputerHand></ComputerHand>
-            <CardPile></CardPile>
-            <PlayerTricks></PlayerTricks>
-            <ComputerTricks></ComputerTricks>
-            <PlayerLatestRequest></PlayerLatestRequest>
-            <ComputerLatestRequest></ComputerLatestRequest>
-            
+            <PlayTable></PlayTable>
             <Footer></Footer>
         </>
-    )
+    );
 }
+
+export default Game;
