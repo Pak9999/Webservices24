@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getGame, playerAskFor } from '../../apiService';
-import CardPile from '../../components/cardPile';
-import ComputerHand from '../../components/computerHand';
-import ComputerLatestRequest from '../../components/computerLatestRequest';
-import ComputerTricks from '../../components/computerTricks';
-import PlayerHand from '../../components/playerHand';
-import PlayerLatestRequest from '../../components/playerLatestRequest';
-import PlayerTricks from '../../components/playerTricks';
+import { getGame, playerAskFor } from '../apiService.ts';
+import CardPile from './cardPile.tsx';
+import ComputerHand from './computerHand.tsx';
+import ComputerLatestRequest from './computerLatestRequest.tsx';
+import ComputerTricks from './computerTricks.tsx';
+import PlayerHand from './playerHand.tsx';
+import PlayerLatestRequest from './playerLatestRequest.tsx';
+import PlayerTricks from './playerTricks.tsx';
 
 const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     const [game, setGame] = useState<any>(null);
@@ -14,6 +14,7 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     useEffect(() => {
         const fetchGame = async () => {
             const gameData = await getGame(gameId);
+            console.log("Fetched game data:", gameData);
             setGame(gameData);
         };
 
@@ -25,13 +26,15 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
         setGame(updatedGame);
     };
 
-    if (!game) {
+    if (!game || !game.playerHand) {
         return <p>Loading...</p>;
     }
 
+    console.log("Game object:", game);
+
     return (
         <div className="play-table">
-            <PlayerHand />
+            <PlayerHand playerHand={game.playerHand} />
             <ComputerHand />
             <CardPile />
             <PlayerTricks />

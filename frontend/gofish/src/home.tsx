@@ -1,21 +1,16 @@
-
 import React from "react";
-
 import Header from "./layout/header/header.tsx";
 import Footer from "./layout/footer/footer.tsx";
-import GameOptions from "./layout/gameOptions/gameOptions.tsx";
-
-
+import GameOptions from "./components/gameOptions.tsx";
 
 const Home: React.FC = () => {
     return (
         <>
-            <Header></Header>
-            <GameOptions></GameOptions>
-            <Footer></Footer>
+            <Header />
+            <GameOptions />
+            <Footer />
         </>
     );
 }
-
 
 export default Home;
