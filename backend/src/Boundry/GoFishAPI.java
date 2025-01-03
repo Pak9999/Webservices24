@@ -33,7 +33,7 @@ public class GoFishAPI {
     public void PlayerAskFor(Context ctx) throws IOException, InterruptedException {
         String id = ctx.pathParam("id");
         if (GFController.getAllgames().containsKey(id)) {
-            ctx.header(Header.CONTENT_TYPE, "application/json").json(gson.toJson(GFController.runGame(id, ctx.attribute("value"))));
+            ctx.header(Header.CONTENT_TYPE, "application/json").json(gson.toJson(GFController.runGame(id, ctx.queryParam("value"))));
         }
         else{
             ctx.status(404).result("Spelet finns inte");

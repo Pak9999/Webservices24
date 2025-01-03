@@ -13,7 +13,7 @@ export const getGame = async (id: string) => {
 };
 
 export const playerAskFor = async (id: string, value: string) => {
-    const response = await axios.put(`${API_BASE_URL}/${id}`, { value });
+    const response = await axios.put(`${API_BASE_URL}/${id}?value=${value}`);
     return response.data;
 };
 

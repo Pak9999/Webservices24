@@ -22,11 +22,17 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     }, [gameId]);
 
     const handlePlayerAskFor = async (value: string) => {
-        const updatedGame = await playerAskFor(gameId, value);
-        setGame(updatedGame);
+        try {
+            console.log(`Player asked for: ${value}`);
+            const updatedGame = await playerAskFor(gameId, value);
+            console.log("Updated game data:", updatedGame);
+            setGame(updatedGame);
+        } catch (error) {
+            console.error("Error asking for card:", error);
+        }
     };
 
-    if (!game || !game.playerHand) {
+    if (!game) {
         return <p>Loading...</p>;
     }
 
@@ -39,7 +45,7 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
             <CardPile remainingCards={game.remainingCards} />
             <CompletedPlayerPairs completedPlayerPairs={game.completedPlayerPairs} />
             <CompletedComputerPairs completedComputerPairs={game.completedComputerPairs} />
-            {/* <LatestPlayerRequest /> #TODO after input is fixed */}
+            <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest}/>
             <LatestComputerRequest latestComputerRequest={game.latestComputerRequest}/>
         </div>
     );
