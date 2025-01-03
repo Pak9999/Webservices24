@@ -35,8 +35,8 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     return (
         <div className="play-table">
             <PlayerHand playerHand={game.playerHand} />
-            <ComputerHand />
-            <CardPile />
+            <ComputerHand computerHand={game.computerHand}/>
+            <CardPile remainingCards={game.remainingCards} />
             <PlayerTricks />
             <ComputerTricks />
             <PlayerLatestRequest />

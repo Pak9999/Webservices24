@@ -1,10 +1,22 @@
 import React from 'react';
 
 
-const CardPile: React.FC = () => {
+
+interface CardPileProps {
+    remainingCards: number;
+}
+
+
+const CardPile: React.FC<CardPileProps> = ({ remainingCards }) => {
+    console.log("Cards left:", remainingCards.length);
     return (
         <>
-            <p>Card Pile</p>
+            <div className="card-pile">
+                <h3>Card Pile</h3>
+                <p>Cards Left: {remainingCards}</p>
+                
+            </div>
+
         </>
     );
 }
