@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getGame, playerAskFor } from '../apiService.ts';
 import CardPile from './cardPile.tsx';
 import ComputerHand from './computerHand.tsx';
-import ComputerLatestRequest from './computerLatestRequest.tsx';
-import ComputerTricks from './computerTricks.tsx';
+import LatestComputerRequest from './latestComputerRequest.tsx';
+import CompletedComputerPairs from './completedComputerPairs.tsx';
 import PlayerHand from './playerHand.tsx';
-import PlayerLatestRequest from './playerLatestRequest.tsx';
-import PlayerTricks from './playerTricks.tsx';
+import LatestPlayerRequest from './latestPlayerRequest.tsx';
+import CompletedPlayerPairs from './completedPlayerPairs.tsx';
 
 const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     const [game, setGame] = useState<any>(null);
@@ -34,14 +34,13 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
 
     return (
         <div className="play-table">
-            <PlayerHand playerHand={game.playerHand} />
+            <PlayerHand playerHand={game.playerHand} handlePlayerAskFor={handlePlayerAskFor} />
             <ComputerHand computerHand={game.computerHand}/>
             <CardPile remainingCards={game.remainingCards} />
-            <PlayerTricks />
-            <ComputerTricks />
-            <PlayerLatestRequest />
-            <ComputerLatestRequest />
-            <button onClick={() => handlePlayerAskFor('Ace')}>Ask for Ace</button>
+            <CompletedPlayerPairs completedPlayerPairs={game.completedPlayerPairs} />
+            <CompletedComputerPairs completedComputerPairs={game.completedComputerPairs} />
+            {/* <LatestPlayerRequest /> #TODO after input is fixed */}
+            <LatestComputerRequest latestComputerRequest={game.latestComputerRequest}/>
         </div>
     );
 };

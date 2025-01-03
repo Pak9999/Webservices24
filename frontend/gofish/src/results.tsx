@@ -3,11 +3,8 @@ import React from "react";
 import Header from "./layout/header/header.tsx";
 import Footer from "./layout/footer/footer.tsx";
 import Winner from "./components/winner.tsx";
-import PlayerTricks from "./components/playerTricks.tsx";
-import ComputerTricks from "./components/computerTricks.tsx";
-
-
-
+import completedPlayerPairs from "./components/completedPlayerPairs.tsx";
+import completedComputerPairs from "./components/completedComputerPairs.tsx";
 
 
 const Results: React.FC = () => {
@@ -15,8 +12,8 @@ const Results: React.FC = () => {
         <>
             <Header></Header>
             <Winner></Winner>
-            <PlayerTricks></PlayerTricks>
-            <ComputerTricks></ComputerTricks>
+            <completedPlayerPairs></completedPlayerPairs>
+            <completedComputerPairs></completedComputerPairs>
             <button><a href="/">Play Again</a></button>
             <Footer></Footer>
         </>

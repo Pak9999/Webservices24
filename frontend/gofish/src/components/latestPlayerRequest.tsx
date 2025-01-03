@@ -1,7 +1,7 @@
 import React from "react";
 
 
-const PlayerLatestRequest: React.FC = () => {
+const LatestPlayerRequest: React.FC = () => {
     return (
         <>
             <p>Player Latest Request</p>
@@ -9,4 +9,4 @@ const PlayerLatestRequest: React.FC = () => {
     );
 }
 
-export default PlayerLatestRequest;
+export default LatestPlayerRequest;

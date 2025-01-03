@@ -2,12 +2,12 @@ import React from "react";
 
 
 
-const ComputerTricks: React.FC = () => {
+const completedComputerPairs: React.FC = () => {
     return (
         <>
-            <p>Computer Tricks</p>
+            <p>Computer Pairs</p>
         </>
     );
 }
 
-export default ComputerTricks;
+export default completedComputerPairs;
