@@ -74,7 +74,7 @@ public class GoFishController {
                 i--;
             }
         }
-        if(a.size() > 0) {
+        if(!a.isEmpty()) {
             StickObject obj = new StickObject(a.get(0), a.get(1), a.get(2), a.get(3));
             completed.add(obj);
         }
@@ -178,15 +178,6 @@ public class GoFishController {
         Collections.shuffle(arrayList);
     }
 
-    /*
-    public String checkCompChoise(String compvalue){
-        if (compvalue == game.getLatestComputerRequest()) {
-            shuffleArray(game.getComputerHand());
-            compvalue = game.getComputerHand().get(0).getValue();
-        }
-        return compvalue;
-    }
-     */
 
     public CardGame runGame(String id, String value) throws IOException, InterruptedException {
         CardGame game = allGames.get(id);
@@ -197,12 +188,21 @@ public class GoFishController {
 
         //Computers choice and moves
         AiMove nextMove = apiC.newMove();
+        game.setDecisionBasedOnPicture(nextMove.getAdress());
+        game.setComputerID(nextMove.getName());
         shuffleArray(game.getComputerHand());
+        if (game.getComputerHand().isEmpty() && game.getRemainingCards() != 0){
+            dealCards(game, game.getComputerHand(), 1);
+        }
         String compValue = game.getComputerHand().get(nextMove.getNumber()).getValue();
         System.out.println("Comp asked for: "+compValue);
         askFor(game, compValue);
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
+
+        if (game.getPlayerHand().isEmpty() && game.getRemainingCards() != 0){
+            dealCards(game, game.getPlayerHand(), 1);
+        }
 
         return game;
     }
