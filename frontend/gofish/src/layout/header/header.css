@@ -5,8 +5,13 @@
     padding: 14px 20px 0px 14px;
     height: 10vh;
     width: 100%;
-    background-color: blueviolet;
+    background-color: #615423;
 
+}
+
+a {
+    color: white;
+    text-decoration: none;
 }
 
 h2 {

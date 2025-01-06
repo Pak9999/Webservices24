@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createNewGame } from "../apiService.ts";
+import "./gameOptions.css";
 
 const GameOptions: React.FC = () => {
     const [gameId, setGameId] = useState<string | null>(null);
@@ -20,8 +21,8 @@ const GameOptions: React.FC = () => {
 
     return (
         <div>
-            <p>Game Options</p>
-            <button onClick={handleCreateNewGame}>Create New Game</button>
+            <p>Här kan du spela finns i sjön mot Malmös trafikplatser</p>
+            <button onClick={handleCreateNewGame}>Starta ett nytt spel</button>
             {gameId && <p>New Game Created with ID: {gameId}</p>}
         </div>
     );

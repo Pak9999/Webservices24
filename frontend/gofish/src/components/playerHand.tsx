@@ -12,12 +12,27 @@ interface PlayerHandProps {
   handlePlayerAskFor: (value: string) => void;
 }
 
+const getCardValue = (value: string): number => {
+  switch (value) {
+    case 'ACE': return 14;
+    case 'KING': return 13;
+    case 'QUEEN': return 12;
+    case 'JACK': return 11;
+    default: return parseInt(value) || 0;
+  }
+};
+
 const PlayerHand: React.FC<PlayerHandProps> = ({ playerHand = [], handlePlayerAskFor }) => {
-  console.log("PlayerHand component received playerHand:", playerHand);
+  const sortedHand = [...playerHand].sort((a, b) => {
+    const valueA = getCardValue(a.value);
+    const valueB = getCardValue(b.value);
+    return valueB - valueA; // Sort descending (Ace to 2)
+  });
+
   return (
     <div className="player-hand">
-      <h3>Your Hand</h3>
-      {playerHand.map((card, index) => (
+      <h3>Din hand</h3>
+      {sortedHand.map((card, index) => (
         <img 
           key={index} 
           src={card.imgURI.replace(/"/g, '')} 

@@ -18,6 +18,18 @@ public class GoFishAPI {
     public GoFishAPI() throws IOException, InterruptedException{
         this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         this.GFController = new GoFishController();
+        Javalin app = Javalin.create(config -> {
+                    config.bundledPlugins.enableCors(cors ->{
+                        cors.addRule(it -> {
+                            it.anyHost();
+                        });
+                    });
+                })
+                .post("/api/v1/gofishgames/", ctx -> {this.CreateNewGame(ctx);})
+                .get("/api/v1/gofishgames/{id}", ctx -> {this.GetGame(ctx);})
+                .put("/api/v1/gofishgames/{id}", ctx -> {this.PlayerAskFor(ctx);})
+                .delete("/api/v1/gofishgames/{id}", ctx -> {this.DeleteGame(ctx);})
+                .start(5008);
     }
 
     public void CreateNewGame(Context ctx) throws IOException, InterruptedException {

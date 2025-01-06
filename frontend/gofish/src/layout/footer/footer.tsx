@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
         <>
             <footer className="footer-bg">
                 <section className="footer-content">
-                    <p>Footer</p>
+                    <p>Webbtjänster 2024-25 Grupp 7</p>
                 </section>
             </footer>
         </>

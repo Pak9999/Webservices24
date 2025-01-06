@@ -15,12 +15,12 @@ const computerHand: React.FC<computerHandProps> = ({ computerHand = [] }) => {
   console.log("computerHand component received computerHand:", computerHand);
   return (
     <div className="computer-hand">
-      <h3>Computer's Hand</h3>
+      <h3>Datorns hand</h3>
       {computerHand.map((card, index) => (
         <img 
             key={index}
-            src="https://deckofcardsapi.com/static/img/back.png" 
-            alt="Back of card" 
+            src={card.imgURI.replace(/"/g, '')} 
+            alt={`${card.value} of ${card.suit}`}
             className="card"
         />
       ))}
