@@ -1,4 +1,25 @@
 .card {
-    width: 8%;
-    height: 8%;
+    width: 100px;
+    height: auto;
+    margin: 5px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.player-hand .card:hover {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.computer-hand .card {
+    cursor: default;
+}
+
+.computer-hand .card:hover {
+    transform: none;
 }

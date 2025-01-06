@@ -19,8 +19,8 @@ const computerHand: React.FC<computerHandProps> = ({ computerHand = [] }) => {
       {computerHand.map((card, index) => (
         <img 
             key={index}
-            src={card.imgURI.replace(/"/g, '')} 
-            alt={`${card.value} of ${card.suit}`} 
+            src="https://deckofcardsapi.com/static/img/back.png" 
+            alt="Back of card" 
             className="card"
         />
       ))}

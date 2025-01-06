@@ -1,58 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { getGame, playerAskFor } from '../apiService.ts';
-import CardPile from './cardPile.tsx';
-import ComputerHand from './computerHand.tsx';
-import LatestComputerRequest from './latestComputerRequest.tsx';
-import CompletedComputerPairs from './completedComputerPairs.tsx';
-import PlayerHand from './playerHand.tsx';
-import LatestPlayerRequest from './latestPlayerRequest.tsx';
-import CompletedPlayerPairs from './completedPlayerPairs.tsx';
-
-import './playTable.css';
+import React, { useEffect, useState } from "react";
+import { getGame, playerAskFor } from "../apiService.ts";
+import CardPile from "./cardPile.tsx";
+import ComputerHand from "./computerHand.tsx";
+import LatestComputerRequest from "./latestComputerRequest.tsx";
+import CompletedComputerPairs from "./completedComputerPairs.tsx";
+import PlayerHand from "./playerHand.tsx";
+import LatestPlayerRequest from "./latestPlayerRequest.tsx";
+import CompletedPlayerPairs from "./completedPlayerPairs.tsx";
+import StickCounter from "./stickCounter.tsx";
+import "./playTable.css";
 
 const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
-    const [game, setGame] = useState<any>(null);
+  const [game, setGame] = useState<any>(null);
 
-    useEffect(() => {
-        const fetchGame = async () => {
-            const gameData = await getGame(gameId);
-            console.log("Fetched game data:", gameData);
-            setGame(gameData);
-        };
-
-        fetchGame();
-    }, [gameId]);
-
-    const handlePlayerAskFor = async (value: string) => {
-        try {
-            console.log(`Player asked for: ${value}`);
-            const updatedGame = await playerAskFor(gameId, value);
-            console.log("Updated game data:", updatedGame);
-            setGame(updatedGame);
-        } catch (error) {
-            console.error("Error asking for card:", error);
-        }
+  useEffect(() => {
+    const fetchGame = async () => {
+      const gameData = await getGame(gameId);
+      setGame(gameData);
     };
 
-    if (!game) {
-        return <p>Loading...</p>;
+    fetchGame();
+  }, [gameId]);
+
+  const handlePlayerAskFor = async (value: string) => {
+    try {
+      const updatedGame = await playerAskFor(gameId, value);
+      setGame(updatedGame);
+    } catch (error) {
+      console.error("Error asking for card:", error);
     }
+  };
 
-    console.log("Game object:", game);
+  if (!game) {
+    return <p>Loading...</p>;
+  }
 
-    return (
-        <main className="play-table-container">
-            <div className="play-table">
-                <PlayerHand playerHand={game.playerHand} handlePlayerAskFor={handlePlayerAskFor} />
-                <ComputerHand computerHand={game.computerHand}/>
-                <CardPile remainingCards={game.remainingCards} />
-                <CompletedPlayerPairs completedPlayerPairs={game.completedPlayerPairs} />
-                <CompletedComputerPairs completedComputerPairs={game.completedComputerPairs} />
-                <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest}/>
-                <LatestComputerRequest latestComputerRequest={game.latestComputerRequest}/>
+  return (
+    <main className="play-table-container">
+      <div className="play-table">
+        <div className="game-row computer-row">
+          <div className="stick-section">
+            <StickCounter
+              count={game.completedComputerPairs ? game.completedComputerPairs.length : 0}
+              label="Computer Sticks"
+            />
+          </div>
+          <div className="hand-section">
+            <ComputerHand computerHand={game.computerHand} />
+          </div>
+        </div>
+
+        <div className="game-row middle-row">
+          <LatestComputerRequest latestComputerRequest={game.latestComputerRequest} />
+          <div className="kanalen">
+            <div className="card-stack">
+              {Array.from({ length: Math.min(game.remainingCards, 5) }).map((_, i) => (
+                <div key={i} className="card-visual" />
+              ))}
             </div>
-        </main>
-    );
+            <div className="card-counter">{game.remainingCards} kort</div>
+          </div>
+          <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest} />
+        </div>
+
+        <div className="game-row player-row">
+          <div className="hand-section">
+            <PlayerHand
+              playerHand={game.playerHand}
+              handlePlayerAskFor={handlePlayerAskFor}
+            />
+          </div>
+          <div className="stick-section">
+            <StickCounter
+              count={game.completedPlayerPairs ? game.completedPlayerPairs.length : 0}
+              label="Your Sticks"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default PlayTable;
