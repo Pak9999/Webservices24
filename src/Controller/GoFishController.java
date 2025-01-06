@@ -209,6 +209,9 @@ public class GoFishController {
         if (game.getPlayerHand().isEmpty() && game.getRemainingCards() != 0){
             dealCards(game, game.getPlayerHand(), 1);
         }
+        if (game.getComputerHand().isEmpty() && game.getRemainingCards() != 0){
+            dealCards(game, game.getComputerHand(), 1);
+        }
 
         return game;
     }
