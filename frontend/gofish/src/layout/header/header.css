@@ -1,0 +1,16 @@
+.header-bg {
+
+    color: white;
+    align-items: center;
+    padding: 14px 20px 0px 14px;
+    height: 10vh;
+}
+
+h2 {
+    margin: 0;
+}
+
+h5 {
+    margin: 0;
+    font-size: small;
+}

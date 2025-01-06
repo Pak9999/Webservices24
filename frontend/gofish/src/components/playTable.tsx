@@ -8,6 +8,8 @@ import PlayerHand from './playerHand.tsx';
 import LatestPlayerRequest from './latestPlayerRequest.tsx';
 import CompletedPlayerPairs from './completedPlayerPairs.tsx';
 
+import './playTable.css';
+
 const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     const [game, setGame] = useState<any>(null);
 
@@ -39,15 +41,17 @@ const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
     console.log("Game object:", game);
 
     return (
-        <div className="play-table">
-            <PlayerHand playerHand={game.playerHand} handlePlayerAskFor={handlePlayerAskFor} />
-            <ComputerHand computerHand={game.computerHand}/>
-            <CardPile remainingCards={game.remainingCards} />
-            <CompletedPlayerPairs completedPlayerPairs={game.completedPlayerPairs} />
-            <CompletedComputerPairs completedComputerPairs={game.completedComputerPairs} />
-            <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest}/>
-            <LatestComputerRequest latestComputerRequest={game.latestComputerRequest}/>
-        </div>
+        <main className="play-table-container">
+            <div className="play-table">
+                <PlayerHand playerHand={game.playerHand} handlePlayerAskFor={handlePlayerAskFor} />
+                <ComputerHand computerHand={game.computerHand}/>
+                <CardPile remainingCards={game.remainingCards} />
+                <CompletedPlayerPairs completedPlayerPairs={game.completedPlayerPairs} />
+                <CompletedComputerPairs completedComputerPairs={game.completedComputerPairs} />
+                <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest}/>
+                <LatestComputerRequest latestComputerRequest={game.latestComputerRequest}/>
+            </div>
+        </main>
     );
 };
 

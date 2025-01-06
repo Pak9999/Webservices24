@@ -1,0 +1,17 @@
+.play-table-container{
+    height: 80vh;
+}
+
+
+.play-table{
+    background-color: #35654d;
+    height: 80vh;    
+}
+
+.play-table h3{
+    margin: 0;
+}
+
+.play-table p {
+    margin: 0;
+}

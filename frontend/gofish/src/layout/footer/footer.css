@@ -1,0 +1,11 @@
+.footer-bg {
+    color: white;
+    display: flex;
+    justify-content: center;
+    height: 10vh;
+}
+
+.footer-content p {
+    margin: 0;
+    padding-top: 1.5vh;
+}

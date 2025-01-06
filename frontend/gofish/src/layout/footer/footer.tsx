@@ -1,10 +1,16 @@
 import React from "react";
 
+import "./footer.css";
+
 
 const Footer: React.FC = () => {
     return (
         <>
-            <p>Footer</p>
+            <footer className="footer-bg">
+                <section className="footer-content">
+                    <p>Footer</p>
+                </section>
+            </footer>
         </>
     );
 }

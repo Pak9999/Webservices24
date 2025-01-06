@@ -12,7 +12,6 @@ const CardPile: React.FC<CardPileProps> = ({ remainingCards }) => {
     return (
         <>
             <div className="card-pile">
-                <h3>Card Pile</h3>
                 <p>Cards Left: {remainingCards}</p>
                 
             </div>
