@@ -21,11 +21,15 @@ const computerHand: React.FC<computerHandProps> = ({ computerHand = [] }) => {
             key={index}
             src={card.imgURI.replace(/"/g, '')} 
             alt={`${card.value} of ${card.suit}`}
+            /* src={card.imgURI.replace(/"/g, '')} 
+            alt={${card.value} of ${card.suit}} Face Down Cards*/
             className="card"
         />
       ))}
     </div>
   );
 };
+
+
 
 export default computerHand;
