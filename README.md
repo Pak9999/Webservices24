@@ -26,3 +26,7 @@ A React-based implementation of the classic card game "Go Fish" (Finns i sjön i
 2. Install dependencies:
 ```sh
 npm install
+```
+3. Run the dev server:
+```sh
+npm start
