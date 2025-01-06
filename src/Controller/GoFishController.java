@@ -190,13 +190,19 @@ public class GoFishController {
         AiMove nextMove = apiC.newMove();
         game.setDecisionBasedOnPicture(nextMove.getAdress());
         game.setComputerID(nextMove.getName());
-        shuffleArray(game.getComputerHand());
         if (game.getComputerHand().isEmpty() && game.getRemainingCards() != 0){
             dealCards(game, game.getComputerHand(), 1);
         }
-        String compValue = game.getComputerHand().get(nextMove.getNumber()).getValue();
-        System.out.println("Comp asked for: "+compValue);
-        askFor(game, compValue);
+        shuffleArray(game.getComputerHand());
+        try {
+            String compValue = game.getComputerHand().get(nextMove.getNumber()).getValue();
+            System.out.println("Comp asked for: "+compValue);
+            askFor(game, compValue);
+        }catch (Exception e){
+            String compValue = game.getComputerHand().get(0).getValue();
+            System.out.println("Comp asked for: "+compValue);
+            askFor(game, compValue);
+        }
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
 
