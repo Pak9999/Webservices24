@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getGame, playerAskFor } from "../apiService.ts";
+import { getGame, playerAskFor, createNewGame } from "../apiService.ts";
 import CardPile from "./cardPile.tsx";
 import ComputerHand from "./computerHand.tsx";
 import LatestComputerRequest from "./latestComputerRequest.tsx";
@@ -9,77 +9,124 @@ import LatestPlayerRequest from "./latestPlayerRequest.tsx";
 import CompletedPlayerPairs from "./completedPlayerPairs.tsx";
 import StickCounter from "./stickCounter.tsx";
 import "./playTable.css";
+import WinScreen from "./winner.tsx";
 
-const PlayTable: React.FC<{ gameId: string }> = ({ gameId }) => {
-  const [game, setGame] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchGame = async () => {
-      const gameData = await getGame(gameId);
-      setGame(gameData);
-    };
-
-    fetchGame();
-  }, [gameId]);
-
-  const handlePlayerAskFor = async (value: string) => {
-    try {
-      const updatedGame = await playerAskFor(gameId, value);
-      setGame(updatedGame);
-    } catch (error) {
-      console.error("Error asking for card:", error);
-    }
-  };
-
-  if (!game) {
-    return <p>Loading...</p>;
+interface Card {
+    value: string;
+    suit: string;
+    imgURI: string;
   }
-
-  return (
-    <main className="play-table-container">
-      <div className="play-table">
-        <div className="game-row computer-row">
-          <div className="stick-section">
-            <StickCounter
-              count={game.completedComputerPairs ? game.completedComputerPairs.length : 0}
-              label="Computer Sticks"
-            />
-          </div>
-          <div className="hand-section">
-            <ComputerHand computerHand={game.computerHand} />
-          </div>
-        </div>
-
-        <div className="game-row middle-row">
-          <LatestComputerRequest latestComputerRequest={game.latestComputerRequest} />
-          <div className="kanalen">
-            <div className="card-stack">
-              {Array.from({ length: Math.min(game.remainingCards, 5) }).map((_, i) => (
-                <div key={i} className="card-visual" />
-              ))}
+  
+  interface Game {
+    computerHand: Card[];
+    playerHand: Card[];
+    remainingCards: number;
+    latestPlayerRequest: string;
+    latestComputerRequest: string;
+    completedPlayerPairs: string[];
+    completedComputerPairs: string[];
+  }
+  
+  interface PlayTableProps {
+    gameId: string;
+  }
+  
+  const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
+    const [game, setGame] = useState<Game | null>(null);
+    const [showWinScreen, setShowWinScreen] = useState(false);
+  
+    useEffect(() => {
+      const fetchGame = async () => {
+        const gameData = await getGame(gameId);
+        setGame(gameData);
+      };
+  
+      fetchGame();
+    }, [gameId]);
+  
+    useEffect(() => {
+      if (game && game.remainingCards === 0) {
+        setShowWinScreen(true);
+      }
+    }, [game]);
+  
+    const handlePlayerAskFor = async (value: string) => {
+      try {
+        const updatedGame = await playerAskFor(gameId, value);
+        setGame(updatedGame);
+      } catch (error) {
+        console.error("Error asking for card:", error);
+      }
+    };
+  
+    const handlePlayAgain = async () => {
+      try {
+        const newGame = await createNewGame();
+        setGame(newGame);
+        setShowWinScreen(false);
+      } catch (error) {
+        console.error("Error creating new game:", error);
+      }
+    };
+  
+    if (!game) {
+      return <p>Loading...</p>;
+    }
+  
+    return (
+      <main className="play-table-container">
+        <div className="play-table">
+          <div className="game-row computer-row">
+            <div className="stick-section">
+              <StickCounter
+                count={game.completedComputerPairs?.length || 0}
+                label="Computer Sticks"
+              />
             </div>
-            <div className="card-counter">{game.remainingCards} kort</div>
+            <div className="hand-section">
+              <ComputerHand computerHand={game.computerHand} />
+            </div>
           </div>
-          <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest} />
+  
+          <div className="game-row middle-row">
+            <LatestComputerRequest latestComputerRequest={game.latestComputerRequest} />
+            <div className="kanalen">
+              <div className="card-stack">
+                {Array.from({ length: Math.min(game.remainingCards, 5) }).map((_, i) => (
+                  <div key={i} className="card-visual" />
+                ))}
+              </div>
+              <div className="card-counter">{game.remainingCards} kort</div>
+            </div>
+            <LatestPlayerRequest latestPlayerRequest={game.latestPlayerRequest} />
+          </div>
+  
+          <div className="game-row player-row">
+            <div className="hand-section">
+              <PlayerHand
+                playerHand={game.playerHand}
+                handlePlayerAskFor={handlePlayerAskFor}
+              />
+            </div>
+            <div className="stick-section">
+              <StickCounter
+                count={game.completedPlayerPairs?.length || 0}
+                label="Your Sticks"
+              />
+            </div>
+          </div>
         </div>
-
-        <div className="game-row player-row">
-          <div className="hand-section">
-            <PlayerHand
-              playerHand={game.playerHand}
-              handlePlayerAskFor={handlePlayerAskFor}
-            />
-          </div>
-          <div className="stick-section">
-            <StickCounter
-              count={game.completedPlayerPairs ? game.completedPlayerPairs.length : 0}
-              label="Your Sticks"
-            />
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-};
-
-export default PlayTable;
+  
+        {showWinScreen && (
+          <WinScreen
+            playerScore={game.completedPlayerPairs?.length || 0}
+            computerScore={game.completedComputerPairs?.length || 0}
+            onPlayAgain={handlePlayAgain}
+          />
+        )}
+      </main>
+    );
+  };
+  
+  export default PlayTable;

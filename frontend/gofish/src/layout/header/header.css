@@ -4,6 +4,9 @@
     align-items: center;
     padding: 14px 20px 0px 14px;
     height: 10vh;
+    width: 100%;
+    background-color: blueviolet;
+
 }
 
 h2 {
