@@ -31,7 +31,7 @@ public class GoFishController {
         String id = game.getGameId();
         Scanner sc = new Scanner(System.in);
 
-        while (game.getRemainingCards() > 0) {
+    while (game.getRemainingCards() >= 0 && !game.getPlayerHand().isEmpty() && !game.getComputerHand().isEmpty()) {
             System.out.println("***********");
             System.out.println(game.getRemainingCards());
             System.out.println("*********");
@@ -185,6 +185,9 @@ public class GoFishController {
         askFor(game, value);
         String playerCompleted = checkPairs(game.getPlayerHand());
         moveCards(game, game.getPlayerHand(), game.getCompletedPlayerPairs(), playerCompleted);
+        if (game.getPlayerHand().isEmpty() && game.getRemainingCards() != 0){
+            dealCards(game, game.getPlayerHand(), 1);
+        }
 
         //Computers choice and moves
         AiMove nextMove = apiC.newMove();
@@ -199,9 +202,11 @@ public class GoFishController {
             System.out.println("Comp asked for: "+compValue);
             askFor(game, compValue);
         }catch (Exception e){
-            String compValue = game.getComputerHand().get(0).getValue();
-            System.out.println("Comp asked for: "+compValue);
-            askFor(game, compValue);
+            try {
+                String compValue = game.getComputerHand().get(0).getValue();
+                System.out.println("Comp asked for: " + compValue);
+                askFor(game, compValue);
+            }catch (Exception ee){}
         }
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
