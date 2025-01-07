@@ -48,7 +48,7 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 	}, [gameId])
 
 	useEffect(() => {
-		if (game && game.remainingCards === 0) {
+		if (game && game.remainingCards === 0 && game.playerHand.length === 0 && game.computerHand.length === 0) {
 			setShowWinScreen(true)
 		}
 	}, [game])
