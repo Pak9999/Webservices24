@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * Class containing 4 cards of the same value. Used by the CardGame class.
+ */
 public class StickObject {
     private PlayingCard c1;
     private PlayingCard c2;

@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Class that handles the logic of the game.
+ */
 public class GoFishController {
     //private CardGame game = null;
     private APIController apiC = null;
@@ -19,10 +22,21 @@ public class GoFishController {
         this.apiC = new APIController();
     }
 
+    /**
+     * Method that returns a game.
+     * @param id what game to be returned
+     * @return a CardGame if it exists in the hashmap.
+     */
     public CardGame getGame(String id) {
         return allGames.get(id);
     }
 
+    /**
+     * Main method used to test the logic in terminal.
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
         GoFishController controller = new GoFishController();
         CardGame game = controller.createNewGame();
@@ -64,6 +78,14 @@ public class GoFishController {
         }
     }
 
+    /**
+     * Method that moves cards from player- or computer-hand to a completedPair list.
+     * @param game What game to make the operations on
+     * @param current Player- or computer-hand to move the cards from
+     * @param completed Player- or computer-completed list to move cards to
+     * @param s containing the value of the cards to be moved.
+     * @throws InterruptedException
+     */
     public void moveCards(CardGame game, ArrayList<PlayingCard> current, ArrayList<StickObject> completed, String s) throws InterruptedException {
         ArrayList<PlayingCard> a = new ArrayList<>();
         for (int i = 0; i < current.size(); i++) {
@@ -81,6 +103,12 @@ public class GoFishController {
 
     }
 
+    /**
+     * Method that is used to create a new game
+     * @return Returns a CardGame object.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public CardGame createNewGame() throws IOException, InterruptedException {
         JsonNode deck = CardAPIHandler.getNewDeck();
         CardGame game = new CardGame();
@@ -93,6 +121,13 @@ public class GoFishController {
         return game;
     }
 
+    /**
+     * Method that is used at the beginning of a new game to deal starting cards to player and computer.
+     * Method also checks if the player or computer has a completed set after the starting cards has been dealt.
+     * @param game what game to setup.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void setupGame(CardGame game) throws IOException, InterruptedException {
         dealCards(game, game.getPlayerHand(), 7);
         dealCards(game, game.getComputerHand(), 7);
@@ -106,6 +141,13 @@ public class GoFishController {
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
     }
 
+    /**
+     * Method used to deal cards to the players of the game.
+     * @param currentGame The game that is being updated
+     * @param whosTurn If the playerhand or computerhand should recieve the cards.
+     * @param nbrOfCards How many cards to deal
+     * @throws IOException
+     */
     public void dealCards(CardGame currentGame, ArrayList<PlayingCard> whosTurn, int nbrOfCards) throws IOException {
         JsonNode currentCards = CardAPIHandler.drawCards(currentGame.getGameId(), nbrOfCards);
         try {
@@ -124,6 +166,11 @@ public class GoFishController {
         }
     }
 
+    /**
+     * Method that checks if there's a completed pair in a hand.
+     * @param currentHand what hand to check.
+     * @return If there is 4 of the same value it returns the value of this card as a String, else it returns nothing.
+     */
     public String checkPairs(ArrayList<PlayingCard> currentHand) {
         HashMap<String, Integer> hm = new HashMap<>();
         for (PlayingCard pc : currentHand) {
@@ -140,6 +187,13 @@ public class GoFishController {
         return null;
     }
 
+    /**
+     * Method that is used to ask for cards and move said cards if the opponent has any cards with that value
+     * @param currentGame what game to run the method un.
+     * @param value what value that is being asked for
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void askFor(CardGame currentGame, String value) throws IOException, InterruptedException {
         boolean foundCards = false;
         if (currentGame.getRoundCounter() % 2 != 0) {
@@ -174,11 +228,22 @@ public class GoFishController {
         currentGame.setRoundCounter((currentGame.getRoundCounter() + 1));
     }
 
+    /**
+     * Method that shuffles an array. Used for shuffling the computers hand to have it ask for different cards.
+     * @param arrayList what arraylist to shuffle.
+     */
     private void shuffleArray(ArrayList<PlayingCard> arrayList) {
         Collections.shuffle(arrayList);
     }
 
-
+    /**
+     * Method that is used to complete a full turn of the game.
+     * @param id what game to be used
+     * @param value The value of a card the player ask for
+     * @return An updated CardGame object after both the player and computer has made a move
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public CardGame runGame(String id, String value) throws IOException, InterruptedException {
         CardGame game = allGames.get(id);
         //Player choice and moves
@@ -199,9 +264,14 @@ public class GoFishController {
             System.out.println("Comp asked for: "+compValue);
             askFor(game, compValue);
         }catch (Exception e){
-            String compValue = game.getComputerHand().get(0).getValue();
-            System.out.println("Comp asked for: "+compValue);
-            askFor(game, compValue);
+            try {
+                String compValue = game.getComputerHand().get(0).getValue();
+                System.out.println("Comp asked for: "+compValue);
+                askFor(game, compValue);
+            }
+            catch (Exception exception){
+                System.out.println(exception.getMessage());
+            }
         }
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);
@@ -216,11 +286,19 @@ public class GoFishController {
         return game;
     }
 
+    /**
+     * Method that deletes a game from the hashmap
+     * @param id What game to remove
+     */
     public void deletegame(String id){
         CardGame game = allGames.get(id);
         allGames.remove(game.getGameId());
     }
 
+    /**
+     * Method that returns the hashmap
+     * @return a hashmap containing all games
+     */
     public HashMap<String, CardGame> getAllgames(){
         return allGames;
     }

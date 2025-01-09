@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * Model klass som innehåller information från ett anrop till trafikverkets API
+ */
 public class ResponseObjTrafikverket
 {
    private String name;

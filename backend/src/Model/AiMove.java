@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * Modelklass som innehåller information om ett drag/val av datorspelaren.
+ */
 public class AiMove {
    private String adress;
    private String name;
