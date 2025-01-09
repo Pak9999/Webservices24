@@ -57,7 +57,7 @@ Gooogle=***********
 4. If you are using VS Code add the the "Extension Pack for Java" from the marketplace.
 
 5. Add the src folder to source path:
-   - Go to the top search bar and type and select the show and run command
+   - Go to the top search bar and select the show and run command
    - then type and select java: configure classpath
    - if there is no current path, click add source root
    - type src as the path
