@@ -36,25 +36,34 @@ APIs:
 
 ## Prerequisites
 
-- Node.js and npm installed on your machine.
-- Java Development Kit (JDK) 17 or higher installed on your machine.
+- [Node.js](https://nodejs.org/en) and npm installed on your machine.
+- [Java Development Kit (JDK)](https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-21) 17 or higher installed on your machine.
 
 ## Backend startup guide
 
 1. Clone the repository
-2. Check if a required JDK(Java Development Kit) is installed
+2. Check if a required JDK(Java Development Kit) is installed by running this in a new terminal
  ```sh
 java -version
 ```
 if its not finding the command, install a JDK(Java Development Kit) 
 
-4. Add a .env file with the provided API keys to the backend\src folder:
+3. Add a .env file with the provided API keys to the backend\src folder:
 ```sh
 Trafik=************
 Azure=*************
 Gooogle=***********
 ```
-3. To start the backend server run the file:
+4. If you are using VS Code add the the "Extension Pack for Java" from the marketplace.
+
+5. Add the src folder to source path:
+   - Go to the top search bar and select the show and run command
+   - then type and select java: configure classpath
+   - if there is no current path, click add source root
+   - type src as the path
+   - apply the settings
+   
+7. To start the backend server run the file:
 ```sh
 StartBackendHere.java
 ```
@@ -62,13 +71,29 @@ StartBackendHere.java
 ## Frontend startup guide
 
 1. Clone the repository
-2. Check if the required node.js is installed
+2. Check if the required node.js is installed by running this command in a new terminal
  ```sh
 node -v
 ```
 if its not finding the command, install node.js
 
-4. Install npm dependencies:
+3. Make sure the you are able to run remote signed scripts
+  -  Open the PowerShell Console by selecting “Run as Administrator” (Or Right-click the Start menu and choose “Windows PowerShell (Admin)” from the context menu) and get the execution Policy with the command:
+      ```
+      Get-ExecutionPolicy
+      ```
+  - if the response says restricted change it to remotesigned with this command:
+      ```
+      Set-ExecutionPolicy RemoteSigned
+      ```
+  - then enter A or Y to confirm the change
+    
+  - verify the change by running the first command again:
+      ```
+      Get-ExecutionPolicy
+      ```
+
+3. Install npm dependencies:
 ```sh
 cd frontend/gofish
 npm install --legacy-peer-deps
