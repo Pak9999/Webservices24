@@ -199,9 +199,14 @@ public class GoFishController {
             System.out.println("Comp asked for: "+compValue);
             askFor(game, compValue);
         }catch (Exception e){
-            String compValue = game.getComputerHand().get(0).getValue();
-            System.out.println("Comp asked for: "+compValue);
-            askFor(game, compValue);
+            try {
+                String compValue = game.getComputerHand().get(0).getValue();
+                System.out.println("Comp asked for: "+compValue);
+                askFor(game, compValue);
+            }
+            catch (Exception exception){
+                System.out.println(exception.getMessage());
+            }
         }
         String compCompleted = checkPairs(game.getComputerHand());
         moveCards(game, game.getComputerHand(), game.getCompletedComputerPairs(), compCompleted);

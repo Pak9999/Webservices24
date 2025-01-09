@@ -8,6 +8,9 @@ import kong.unirest.core.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Klassen hanterar anrop och svar från Google Vision
+ */
 public class GoogleAPI {
     private String apiKey;
     private String endPoint = "https://vision.googleapis.com/v1/images:annotate?key=";
@@ -24,6 +27,11 @@ public class GoogleAPI {
         this.endPoint = endPoint + apiKey;
     }
 
+    /**
+     * Metoden skickar ett anrop till Google och hanterar returen.
+     * @param  adress en sträng som inehålller URL till den aktuella bilden som ska analyseras
+     * @return int antalet identifierade fordon
+     */
     public int countCars(String adress) {
         GoogleRequest req = new GoogleRequest(adress);
         try {
@@ -33,7 +41,6 @@ public class GoogleAPI {
                     .asJson();
 
             if (response.getStatus() == 200)  {
-                //System.out.println(response.getBody().toPrettyString());
                 JSONObject jsonObject = response.getBody().getObject();
                 if (!jsonObject.has("responses")) {
 
@@ -70,7 +77,7 @@ public class GoogleAPI {
         }
     }
     /**
-     Inre klasser för att skapa JSON objekt till body i anropet.
+     Inre klasser för att skapa JSON objekt till body i anropet till Google.
      */
     private static class GoogleRequest {
         private ArrayList<Req> requests;

@@ -7,12 +7,16 @@ import kong.unirest.core.Unirest;
 import kong.unirest.core.json.JSONObject;
 import java.util.ArrayList;
 
+/**
+ * Klassen hanterar anrop och svar till/från Trafikverkets API
+ */
 public class TrafikverketAPI {
    private final String endPoint = "https://api.trafikinfo.trafikverket.se/v2/data.json";
    private String apiKey;
    private ArrayList<String> listaID;
    private int counter = 0;
    private String xmlRequest;
+
 
     public TrafikverketAPI(String apiKey) {
         this.listaID = new ArrayList<>();
@@ -31,6 +35,15 @@ public class TrafikverketAPI {
         listaID.add("SE_STA_CAMERA_PacificSouth_2500089");
         this.apiKey = apiKey;
     }
+
+    /**
+     *  Metoden skapar ett xml objekt baserat på listan av kameror i listaID.
+     *  Skickar ett postanrop med xml objektet.
+     *  Plockar ut URL och namn från JSON svar.
+     *  Lägger till "?type=fullsize" till url sträng
+     *  Skapar och returnerar ett ResponseObjTrafikverket.
+     * @return ResponseObjTrafikverket Innehåller två strängar. En URL till bilden och namn på aktuell kamera
+     */
     public ResponseObjTrafikverket getNewPicture() {
         xmlRequest =  String.format("""
         <REQUEST>
