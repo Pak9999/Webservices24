@@ -2,7 +2,11 @@ import React from "react";
 
 import "./footer.css";
 
-
+/**
+ * The main footer component
+ * 
+ * @returns {JSX.Element} Footer component
+ */
 const Footer: React.FC = () => {
     return (
         <>

@@ -8,10 +8,19 @@ interface WinnerProps {
   onPlayAgain: () => void;
 }
 
+/**
+ * Displays who won the game and the scores
+ * navigates to either the start page or a new game 
+ * 
+ * @param {WinnerProps} props - the properties used by the winner component
+ * @returns {JSX.Element} the rendered winner component
+ */
 const Winner: React.FC<WinnerProps> = ({ playerScore, computerScore, onPlayAgain }) => {
   const navigate = useNavigate();
   const isWinner = playerScore > computerScore;
 
+
+  // Winner screen layout
   return (
     <div className="win-screen-overlay">
       <div className="win-screen-content">

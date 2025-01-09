@@ -3,6 +3,10 @@ import React from "react";
 import "./header.css";
 
 
+/**
+ * The main header component
+ * @returns {JSX.Element} Header component
+ */
 const Header: React.FC = () => {
     return (
         <>

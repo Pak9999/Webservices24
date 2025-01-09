@@ -3,9 +3,13 @@ import { useParams } from "react-router-dom";
 import Header from "../../layout/header/header.tsx";
 import PlayTable from "../../layout/playtable/playTable.tsx";
 import Footer from "../../layout/footer/footer.tsx";
-
 import "./game.css";
 
+
+/**
+ * Game page
+ * @returns {JSX.Element} Game component
+ */
 const Game: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 

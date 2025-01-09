@@ -6,7 +6,15 @@ interface StickCounterProps {
   label: string;
 }
 
+/**
+ * Displays the amount of sticks
+ * 
+ * @param {StickCounterProps} props - properties of the stick counter
+ * @returns {JSX.Element} the rendered component
+ */
 const StickCounter: React.FC<StickCounterProps> = ({ count, label }) => {
+
+  // Stick counter layout
   return (
     <div className="stick-counter">
       <div className="stick-cards">
