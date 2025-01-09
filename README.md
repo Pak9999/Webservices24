@@ -36,8 +36,8 @@ APIs:
 
 ## Prerequisites
 
-- Node.js and npm installed on your machine.
-- Java Development Kit (JDK) 17 or higher installed on your machine.
+- [Node.js](https://nodejs.org/en) and npm installed on your machine.
+- [Java Development Kit (JDK)](https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-21) 17 or higher installed on your machine.
 
 ## Backend startup guide
 
@@ -48,13 +48,22 @@ java -version
 ```
 if its not finding the command, install a JDK(Java Development Kit) 
 
-4. Add a .env file with the provided API keys to the backend\src folder:
+3. Add a .env file with the provided API keys to the backend\src folder:
 ```sh
 Trafik=************
 Azure=*************
 Gooogle=***********
 ```
-3. To start the backend server run the file:
+4. If you are using VS Code add the the "Extension Pack for Java" from the marketplace.
+
+5. Add the src folder to source path:
+   - Go to the top search bar and type and select the show and run command
+   - then type and select java: configure classpath
+   - if there is no current path, click add source root
+   - type src as the path
+   - apply the settings
+   
+7. To start the backend server run the file:
 ```sh
 StartBackendHere.java
 ```
