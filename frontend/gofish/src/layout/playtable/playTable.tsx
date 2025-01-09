@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { getGame, playerAskFor, createNewGame } from "../../apiService.ts"
+import { getGame, playerAskFor } from "../../apiService.ts"
 import ComputerHand from "../../components/computerHand.tsx"
 import LatestComputerRequest from "../../components/latestComputerRequest.tsx"
 import PlayerHand from "../../components/playerHand.tsx"
@@ -39,9 +39,10 @@ interface PlayTableProps {
  * @returns {JSX.Element} the redered play table component
  */
 const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
-	const [game, setGame] = useState<Game | null>(null)
-	const [showWinScreen, setShowWinScreen] = useState(false)
-	const [showImage, setShowImage] = useState(false)
+	const [game, setGame] = useState<Game | null>(null);
+	const [showWinScreen, setShowWinScreen] = useState(false);
+	const [showImage, setShowImage] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	/**
 	 * Fetches the game from the API
@@ -49,20 +50,26 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 	 * @returns {Promise<void>} resolved when the game is fetched
 	 */
 	useEffect(() => {
-		const fetchGame = async () => {
-			const gameData = await getGame(gameId)
-			setGame(gameData)
-		}
+		const fetchGame = async (): Promise<void> => {
+			try {
+				const gameData = await getGame(gameId)
+				setGame(gameData);
+			} catch (error) {
+				console.error("Error fetching game:", error);
+			}
+		};
 
 		fetchGame()
 	}, [gameId])
 
-	// Checks if the game is over and displays the win screen
+	// Starts of as false then checks if the game is over and displays the win screen
 	useEffect(() => {
+		setShowWinScreen(false)
 		if (game && game.remainingCards === 0 && game.playerHand.length === 0 && game.computerHand.length === 0) {
 			setShowWinScreen(true)
 		}
 	}, [game])
+
 
 	/**
 	 * Sends a request to update the game when the player asks for a card
@@ -71,23 +78,16 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 	 * @param {string} value - the value of the card the player is asking for
 	 * @returns {Promise<void>} resolved when the game is updated
 	 */
-	const handlePlayerAskFor = async (value: string) => {
+	const handlePlayerAskFor = async (value: string): Promise<void> => {
+		if (isLoading) return;
+    	setIsLoading(true);
 		try {
 			const updatedGame = await playerAskFor(gameId, value)
 			setGame(updatedGame)
 		} catch (error) {
-			console.error("Error asking for card:", error)
-		}
-	}
-
-	// WIP WIP WIP WIP Creates a new game if the player wants to play again #TODO ALSO INCLUDES PROMISE VOID
-	const handlePlayAgain = async () => {
-		try {
-			const newGame = await createNewGame()
-			setGame(newGame)
-			setShowWinScreen(false)
-		} catch (error) {
-			console.error("Error creating new game:", error)
+			console.error("Error updating game:", error)
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -138,6 +138,7 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 						<PlayerHand
 							playerHand={game.playerHand}
 							handlePlayerAskFor={handlePlayerAskFor}
+							isLoading={isLoading}
 						/>
 					</div>
 					<div className="stick-section">
@@ -166,7 +167,7 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 									alt={game.computerID}
 									className="place-image"
 								/>
-                <h5>Källa: Trafikverket</h5>
+                				<h5>Källa: Trafikverket</h5>
 								<button className="close-button" onClick={() => setShowImage(false)}>
 									Stäng
 								</button>
@@ -181,7 +182,7 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 				<WinScreen
 					playerScore={game.completedPlayerPairs?.length || 0}
 					computerScore={game.completedComputerPairs?.length || 0}
-					onPlayAgain={handlePlayAgain}
+					gameId={gameId}
 				/>
 			)}
 		</main>

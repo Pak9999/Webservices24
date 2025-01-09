@@ -10,6 +10,7 @@ interface Card {
 interface PlayerHandProps {
   playerHand?: Card[];
   handlePlayerAskFor: (value: string) => void;
+  isLoading: boolean;
 }
 
 /**
@@ -35,12 +36,13 @@ const getCardValue = (value: string): number => {
  * @param {PlayerHandProps} props - Properties of the player hand
  * @returns {JSX.Element} the rendered component
  */
-const PlayerHand: React.FC<PlayerHandProps> = ({ playerHand = [], handlePlayerAskFor }) => {
+const PlayerHand: React.FC<PlayerHandProps> = ({ playerHand = [], handlePlayerAskFor, isLoading }) => {
   const sortedHand = [...playerHand].sort((a, b) => {
     const valueA = getCardValue(a.value);
     const valueB = getCardValue(b.value);
     return valueB - valueA; // Sort descending (Ace to 2)
   });
+
 
 
   // Player hand layout
@@ -52,10 +54,15 @@ const PlayerHand: React.FC<PlayerHandProps> = ({ playerHand = [], handlePlayerAs
           key={index} 
           src={card.imgURI.replace(/"/g, '')} 
           alt={`${card.value} of ${card.suit}`} 
-          onClick={() => handlePlayerAskFor(card.value)}
+          onClick={() => !isLoading && handlePlayerAskFor(card.value)}
           className="card"
         />
       ))}
+      {isLoading && (
+        <div className="loading-overlay">
+          <p>Laddar...</p>
+        </div>
+      )}
     </div>
   );
 };
