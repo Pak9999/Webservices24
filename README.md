@@ -42,7 +42,7 @@ APIs:
 ## Backend startup guide
 
 1. Clone the repository
-2. Check if a required JDK(Java Development Kit) is installed
+2. Check if a required JDK(Java Development Kit) is installed by running this in a new terminal
  ```sh
 java -version
 ```
@@ -71,13 +71,29 @@ StartBackendHere.java
 ## Frontend startup guide
 
 1. Clone the repository
-2. Check if the required node.js is installed
+2. Check if the required node.js is installed by running this command in a new terminal
  ```sh
 node -v
 ```
 if its not finding the command, install node.js
 
-4. Install npm dependencies:
+3. Make sure the you are able to run remote signed scripts
+  -  Open the PowerShell Console by selecting “Run as Administrator” (Or Right-click the Start menu and choose “Windows PowerShell (Admin)” from the context menu) and get the execution Policy with the command:
+      ```
+      Get-ExecutionPolicy
+      ```
+  - if the response says restricted change it to remotesigned with this command:
+      ```
+      Set-ExecutionPolicy RemoteSigned
+      ```
+  - then enter A or Y to confirm the change
+    
+  - verify the change by running the first command again:
+      ```
+      Get-ExecutionPolicy
+      ```
+
+3. Install npm dependencies:
 ```sh
 cd frontend/gofish
 npm install --legacy-peer-deps
