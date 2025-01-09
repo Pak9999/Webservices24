@@ -2,6 +2,9 @@ package Model;
 
 import java.util.ArrayList;
 
+/**
+ * Class containing all the information needed to play GoFish
+ */
 public class CardGame {
     private String gameId;
     private String CardDeckid;

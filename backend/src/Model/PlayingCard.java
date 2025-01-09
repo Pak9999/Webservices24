@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * Class used to create a Playing card used in the CardGame class.
+ */
 public class PlayingCard {
     private String value;
     private String suit;
