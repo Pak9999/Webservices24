@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { getGame, playerAskFor, createNewGame } from "../apiService.ts"
-import CardPile from "./cardPile.tsx"
-import ComputerHand from "./computerHand.tsx"
-import LatestComputerRequest from "./latestComputerRequest.tsx"
-import CompletedComputerPairs from "./completedComputerPairs.tsx"
-import PlayerHand from "./playerHand.tsx"
-import LatestPlayerRequest from "./latestPlayerRequest.tsx"
-import CompletedPlayerPairs from "./completedPlayerPairs.tsx"
-import StickCounter from "./stickCounter.tsx"
+import { getGame, playerAskFor, createNewGame } from "../../apiService.ts"
+import ComputerHand from "../../components/computerHand.tsx"
+import LatestComputerRequest from "../../components/latestComputerRequest.tsx"
+import PlayerHand from "../../components/playerHand.tsx"
+import LatestPlayerRequest from "../../components/latestPlayerRequest.tsx"
+import StickCounter from "../../components/stickCounter.tsx"
 import "./playTable.css"
-import WinScreen from "./winner.tsx"
-import imgPlace from "./imgPlace.tsx"
+import WinScreen from "../../components/winner.tsx"
 
 interface Card {
 	value: string
@@ -26,7 +22,9 @@ interface Game {
 	latestComputerRequest: string
 	completedPlayerPairs: string[]
 	completedComputerPairs: string[]
-  moves?: string[]
+	moves?: string[]
+	computerID?: string
+	decisionBasedOnPicture?: string
 }
 
 interface PlayTableProps {
@@ -73,7 +71,7 @@ const PlayTable: React.FC<PlayTableProps> = ({ gameId }) => {
 	}
 
 	if (!game) {
-		return <p>Loading...</p>
+		return <p>Spelet kunde inte hittas.</p>
 	}
 
 	return (
