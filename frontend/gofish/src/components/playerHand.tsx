@@ -60,7 +60,7 @@ const PlayerHand: React.FC<PlayerHandProps> = ({ playerHand = [], handlePlayerAs
       ))}
       {isLoading && (
         <div className="loading-overlay">
-          <p>Laddar...</p>
+          <p>Datorn tänker...</p>
         </div>
       )}
     </div>
