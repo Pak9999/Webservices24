@@ -23,6 +23,7 @@ public class GoogleAPI {
         fordon.add("Bus");
         fordon.add("Motorcycle");
         fordon.add("Bicycle");
+        fordon.add("Train");
         this.apiKey = apiKey;
         this.endPoint = endPoint + apiKey;
     }
@@ -42,17 +43,20 @@ public class GoogleAPI {
 
             if (response.getStatus() == 200)  {
                 JSONObject jsonObject = response.getBody().getObject();
+                
                 if (!jsonObject.has("responses")) {
 
                     return 0;
                 }
-                if (!jsonObject.has("localizedObjectAnnotations")) {
 
+                JSONArray responsesArray = jsonObject.getJSONArray("responses");
+                JSONObject firstResponse = responsesArray.getJSONObject(0);
+
+                if (!firstResponse.has("localizedObjectAnnotations")) {
                     return 0;
                 }
 
-               JSONArray resultArray =  jsonObject.getJSONArray("responses").getJSONObject(0).getJSONArray("localizedObjectAnnotations");
-
+                JSONArray resultArray = firstResponse.getJSONArray("localizedObjectAnnotations");
                if (resultArray.isEmpty()){
                    return 0;
                 }
