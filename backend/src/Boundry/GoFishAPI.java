@@ -87,20 +87,4 @@ public class GoFishAPI {
         }
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        GoFishAPI GFAPI = new GoFishAPI();
-
-        Javalin app = Javalin.create(config -> {
-                    config.bundledPlugins.enableCors(cors ->{
-                        cors.addRule(it -> {
-                            it.anyHost();
-                        });
-                    });
-                })
-                .post("/api/v1/gofishgames/", ctx -> {GFAPI.CreateNewGame(ctx);})
-                .get("/api/v1/gofishgames/{id}", ctx -> {GFAPI.GetGame(ctx);})
-                .put("/api/v1/gofishgames/{id}", ctx -> {GFAPI.PlayerAskFor(ctx);})
-                .delete("/api/v1/gofishgames/{id}", ctx -> {GFAPI.DeleteGame(ctx);})
-                .start(5008);
-    }
 }

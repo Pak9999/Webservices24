@@ -31,6 +31,7 @@ public class APIController {
         ResponseObjTrafikverket response = trafikverketAPI.getNewPicture();
         int nbrGoogle = googleAPI.countCars(response.getUrl());
         int nbrAzure = azureAPI.countCars(response.getUrl());
+        System.out.println("Azure hittade " + nbrAzure + " fordon, Google hittade " + nbrGoogle + " fordon");
         if (nbrAzure>nbrGoogle){
             return new AiMove(response.getUrl(), nbrAzure,response.getName());
                     }
