@@ -38,6 +38,7 @@ APIs:
 
 - [Node.js](https://nodejs.org/en) and npm installed on your machine.
 - [Java Development Kit (JDK)](https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-21) 17 or higher installed on your machine.
+- [VS Code](https://code.visualstudio.com/) 
 
 ## Backend startup guide
 
