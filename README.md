@@ -98,6 +98,12 @@ if its not finding the command, install node.js
 cd frontend/gofish
 npm install --legacy-peer-deps
 ```
+```sh
+npm install react-scripts --legacy-peer-deps
+```
+```sh
+npm install axios --legacy-peer-deps 
+```
 3. Run the frontend server:
 ```sh
 npm start
